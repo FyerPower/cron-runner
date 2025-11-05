@@ -13,7 +13,7 @@ fi
 # Set proper permissions for cron.d files
 if [ -d "/etc/cron.d" ]; then
     echo "Setting permissions for cron.d files..."
-    chmod -R 644 /etc/cron.d/*
+    find /etc/cron.d -type f -exec chmod 644 {} \;
 fi
 
 # Start cron in foreground
