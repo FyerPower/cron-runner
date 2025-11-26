@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  # Example main application service
+  app:
+    image: nginx:alpine
+    container_name: my-app
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  # Cron runner as a sidecar
+  cron-runner:
+    build: .
+    container_name: cron-runner
+    volumes:
+      # Mount your cron.d configuration file(s)
+      - ./examples/cron.d:/etc/cron.d:ro
+      # Mount your scripts directory
+      - ./examples/scripts:/scripts:ro
+      # Optional: Mount docker socket for docker operations
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
